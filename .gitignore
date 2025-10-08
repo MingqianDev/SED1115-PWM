@@ -208,3 +208,6 @@ __marimo__/
 
 # Obsidian
 .obsidian
+
+# ignore the pdf file in doc folder 
+/doc/*.pdf
