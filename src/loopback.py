@@ -12,4 +12,4 @@ for duty in range(0, 65536, 8192):
     time.sleep(0.3)  # wait for low pass filter is stable
     raw = adc.read(channel1=2)  # read AIN2
     voltage = adc.raw_to_v(raw)
-    print("Duty:", duty/65535, "ADC raw:", voltage)
+    print("Duty:", duty/65535, "ADC voltage:", voltage)
