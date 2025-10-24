@@ -12,6 +12,10 @@ duty = int(0.375 * 65535)
 pwm.duty_u16(duty)
 uart.write(duty)
 time.sleep(0.3)
+
+# send data
+uart.write(str(duty) + "\n")
+time.sleep(1)
     
 while True:
     # check if any data is avaliable to read
