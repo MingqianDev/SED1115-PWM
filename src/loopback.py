@@ -11,7 +11,7 @@ pwm = PWM(Pin(16), freq=1000) # Connect Pin 16 to PWM
 uart = UART(1, baudrate=9600, tx=Pin(8), rx=Pin(9)) # connect tx and rx together
 
 def loopback_pwm():
-    for duty in range(0, 65536, 8192):
+    for duty in range(0, 65536 + 8192, 8192):
         pwm.duty_u16(duty)
         time.sleep(0.3)  # wait for low pass filter is stable
         raw = adc.read(channel1=2)  # read AIN2
@@ -28,5 +28,3 @@ def loopback_uart():
         if uart.any():
             data = uart.read()
             print("Received:", data)
-
-loopback_uart()
