@@ -29,5 +29,7 @@ while True:
             except ValueError:
                 print("Could not interpret received data.")
 
+    print("-------------------------------------")
+
     time.sleep(1)
 
