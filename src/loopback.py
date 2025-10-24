@@ -21,10 +21,19 @@ def loopback_pwm():
 def loopback_uart():
     while True:
         # send data
-        uart.write('Hello UART!\n')
+        value = int(0.375 * 65535)
+        uart.write(str(value) + "\n")
         time.sleep(1)
 
         # check if any data is avaliable to read
         if uart.any():
-            data = uart.read()
-            print("Received:", data)
+            line = uart.readline() # read the line from the UART
+            if line:
+                try:
+                    text = line.strip() # decode the line to a string and strip the whitespace
+                    received_value = int(text)
+                    print("Received:", received_value)
+                except ValueError:
+                    print("Could not interpret received data.")
+
+loopback_uart()
