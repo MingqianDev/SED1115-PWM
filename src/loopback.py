@@ -36,4 +36,4 @@ def loopback_uart():
                 except ValueError:
                     print("Could not interpret received data.")
 
-loopback_uart()
+
