@@ -10,6 +10,7 @@ adc = ADS1015(i2c, address=0x48)
 uart = UART(1, baudrate=9600, tx=Pin(8), rx=Pin(9))
 
 while True:
+    # read the signal 
     raw = adc.read(channel1=2)  # read AIN2
     voltage = adc.raw_to_v(raw)
     print("ADC voltage:", voltage, "V")
