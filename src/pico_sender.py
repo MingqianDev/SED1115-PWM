@@ -10,11 +10,11 @@ uart = UART(1, baudrate=9600, tx=Pin(8), rx=Pin(9))
 # set the duty cycle and send the pwm signal to the other Pico board
 duty = int(0.375 * 65535)
 pwm.duty_u16(duty)
-
-# send data
-uart.write(str(duty) + "\n")
     
 while True:
+    # send data
+    uart.write(str(duty) + "\n")
+
     # check if any data is avaliable to read
     if uart.any():
         line = uart.readline() # read the line from the UART
@@ -28,4 +28,6 @@ while True:
                 print("Error:", error, "%")
             except ValueError:
                 print("Could not interpret received data.")
+
+    time.sleep(1)
 
