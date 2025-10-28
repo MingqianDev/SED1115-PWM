@@ -41,9 +41,9 @@ def loopback_uart():
 
 
 def loopback_whole():
-    # set the duty cycle
 
     while True:
+        # set the duty cycle
         duty = r1.read_u16()
         pwm.duty_u16(duty)
         print("PWM duty cycle set to: ", duty / 65535 * 100, "%")
@@ -55,6 +55,7 @@ def loopback_whole():
         raw = adc.read(channel1=2)  # read AIN2
         voltage = adc.raw_to_v(raw)
         print("ADC voltage:", voltage, "V")
+        print("ADC raw data: ", raw)
 
         if uart.any():
             line = uart.readline() # read the line from the UART

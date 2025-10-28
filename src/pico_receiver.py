@@ -13,20 +13,22 @@ while True:
     # read the signal 
     raw = adc.read(channel1=2)  # read AIN2
     voltage = adc.raw_to_v(raw)
+    duty = int(voltage / 3.3 * 65535)
     print("ADC voltage:", voltage, "V")
 
     # send the measurement back
-    uart.write(str(raw) + "\n")
+    uart.write(str(duty) + "\n")
+    # print("UART sent: ", str(duty))
 
     if uart.any():
         line = uart.readline() # read the line from the UART
         if line:
             try:
                 text = line.strip() # strip the whitespace
-                received_value = int(text) # between 0-65535
-                print("Received:", received_value)
+                received_value = int(text) # between 0-635535
+                print("UART Received:", received_value)
 
-                error = abs(received_value - raw) / received_value * 100 # calculate the error as a percentage
+                error = abs(received_value - duty) / received_value * 100 # calculate the error as a percentage
                 print("Error:", error, "%")
             except ValueError:
                 print("Could not interpret received data.")

@@ -12,6 +12,7 @@ duty = int(0.375 * 65535)
 pwm.duty_u16(duty)
     
 while True:
+    print(f"PWM duty set to: {duty} ({duty / 65535 * 3.3}v)")
     # send data
     uart.write(str(duty) + "\n")
 
@@ -22,14 +23,14 @@ while True:
             try:
                 text = line.strip() # strip the whitespace
                 received_value = int(text)
-                print("Received:", received_value)
+                print("UART Received:", received_value)
 
                 error = abs(received_value - duty) / duty * 100 # calculate the error as a percentage
                 print("Error:", error, "%")
             except ValueError:
                 print("Could not interpret received data.")
+        print("-------------------------------------")
 
-    print("-------------------------------------")
-
+    
     time.sleep(1)
 
