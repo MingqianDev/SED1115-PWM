@@ -1,4 +1,4 @@
-from machine import Pin, PWM, UART, I2C
+from machine import Pin, PWM, UART, I2C, ADC
 import time
 from lib.ads1x15 import ADS1015
 
@@ -10,14 +10,22 @@ pwm = PWM(Pin(16), freq=1000) # Connect Pin 16 to the PWM pin on the other Pico 
 i2c = I2C(1, scl=Pin(15), sda=Pin(14))
 adc = ADS1015(i2c, address=0x48)
 
+
+r1 = ADC(Pin(26))
+
 # init UART
 uart = UART(1, baudrate=9600, tx=Pin(8), rx=Pin(9))
 
 # set the duty cycle and send the pwm signal to the other Pico board
-send_duty = int(0.1 * 65535)
-pwm.duty_u16(send_duty)
+# send_duty = int(0.1 * 65535)
+# pwm.duty_u16(send_duty)
     
 while True:
+    send_duty = r1.read_u16()
+    time.sleep(0.1)
+    pwm.duty_u16(send_duty)
+    print("PWM duty cycle set to: ", send_duty / 65535 * 100, "%")
+
     print(f"PWM send duty set to: {send_duty} ({send_duty / 65535 * 3.3}v)")
     # send data via UART
     # uart.write("PWM duty: " + str(duty) + "\n")
