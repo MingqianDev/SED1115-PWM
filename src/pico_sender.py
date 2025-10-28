@@ -40,18 +40,22 @@ while True:
         line = uart.readline() # read the line from the UART
         if line:
             try:
-                line = line.strip()
+                line = line.decode().strip()
 
                 # Split into two integer values: send_duty, recv_duty
-                send_duty, recv_duty = map(int, line.split(','))
+                UART_send_duty, UART_recv_duty = map(int, line.split(','))
 
-                print(f"[UART] Received from other Pico → send_duty={send_duty}, recv_duty={recv_duty}")
+                print(f"[UART] Received from other Pico send_duty={UART_send_duty}, recv_duty={UART_recv_duty}")
+
+                print("error for the signal sent from this Pico:", abs(UART_recv_duty - send_duty) / send_duty * 100, "%")
+                print("error for the signal recevied from this Pico:", abs(UART_send_duty - recv_duty) / UART_send_duty * 100, "%")
+
 
             except ValueError:
                 print("[UART] Could not interpret received data:", line)
             except Exception as e:
                 print("[UART] Unexpected error while parsing:", e)
-
+    print("-------------------------------------------------------")
     
     time.sleep(1)
 
