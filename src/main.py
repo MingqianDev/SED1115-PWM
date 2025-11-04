@@ -55,12 +55,12 @@ while True:
                 print(f"  Peer send_duty = {UART_send_duty:<6d}  |  recv_duty = {UART_recv_duty:<6d}")
                 print(f"  Error % (send): {err_send:>6.3f} %")
                 print(f"  Error % (recv): {err_recv:>6.3f} %")
-
+            # When there is something wrong with the data format
             except ValueError:
                 print("[UART] Could not interpret received data:", line)
             except Exception as e:
                 print("[UART] Unexpected error while parsing:", e)
-  
+    # When the connection is lost
     else:
         print("[UART] Pico UART disconnected")
     
