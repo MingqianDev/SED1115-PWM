@@ -24,9 +24,9 @@ while True:
     send_duty = r1.read_u16()
     time.sleep(0.1)
     pwm.duty_u16(send_duty)
-    print("PWM duty cycle set to: ", send_duty / 65535 * 100, "%")
+    # print("PWM duty cycle set to: ", send_duty / 65535 * 100, "%")
 
-    print(f"PWM send duty set to: {send_duty} ({send_duty / 65535 * 3.3}v)")
+    print(f"PWM send duty set to: {send_duty} ({send_duty / 65535 * 3.3}v, {send_duty / 65535 * 100}%)")
     # send data via UART
     # uart.write("PWM duty: " + str(duty) + "\n")
     # print("UART sent: ", str(duty))
