@@ -63,7 +63,10 @@ while True:
                 print("[UART] Could not interpret received data:", line)
             except Exception as e:
                 print("[UART] Unexpected error while parsing:", e)
+  
+    else:
+        print("Pico disconnected")
+    
     print("-------------------------------------------------------")
     
     time.sleep(1)
-
