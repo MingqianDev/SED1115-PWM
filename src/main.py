@@ -15,30 +15,19 @@ r1 = ADC(Pin(26))
 
 # init UART
 uart = UART(1, baudrate=9600, tx=Pin(8), rx=Pin(9))
-
-# set the duty cycle and send the pwm signal to the other Pico board
-# send_duty = int(0.1 * 65535)
-# pwm.duty_u16(send_duty)
     
 while True:
     send_duty = r1.read_u16()
     time.sleep(0.1)
     pwm.duty_u16(send_duty)
-    # print("PWM duty cycle set to: ", send_duty / 65535 * 100, "%")
 
     print(f"PWM send duty set to: {send_duty} ({send_duty / 65535 * 3.3}v, {send_duty / 65535 * 100}%)")
-    # send data via UART
-    # uart.write("PWM duty: " + str(duty) + "\n")
-    # print("UART sent: ", str(duty))
 
     # read the pwm signal
     raw = adc.read(channel1=2)  # read AIN2
     voltage = adc.raw_to_v(raw)
     recv_duty = int(voltage / 3.3 * 65535)
     print("ADC voltage:", voltage, "V")
-
-    # send the measurement back
-    # uart.write("Reveived: " + str(duty) + "\n")
 
     # send data via UART
     uart.write(f"{send_duty},{recv_duty}\n")
@@ -55,8 +44,8 @@ while True:
 
                 print(f"[UART] Received from other Pico send_duty={UART_send_duty}, recv_duty={UART_recv_duty}")
 
-                print("error for the signal sent from this Pico:", abs(UART_recv_duty - send_duty) / send_duty * 100, "%")
-                print("error for the signal recevied from this Pico:", abs(UART_send_duty - recv_duty) / UART_send_duty * 100, "%")
+                print("error % for the signal sent from this Pico:", abs(UART_recv_duty - send_duty) / send_duty * 100, "%")
+                print("error % for the signal recevied from this Pico:", abs(UART_send_duty - recv_duty) / UART_send_duty * 100, "%")
 
 
             except ValueError:
