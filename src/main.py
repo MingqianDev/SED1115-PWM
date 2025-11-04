@@ -21,16 +21,21 @@ while True:
     time.sleep(0.1)
     pwm.duty_u16(send_duty)
 
-    print(f"PWM send duty set to: {send_duty} ({send_duty / 65535 * 3.3}v, {send_duty / 65535 * 100}%)")
+    # print(f"PWM send duty set to: {send_duty} ({send_duty / 65535 * 3.3}v, {send_duty / 65535 * 100}%)")
 
     # read the pwm signal
     raw = adc.read(channel1=2)  # read AIN2
     voltage = adc.raw_to_v(raw)
     recv_duty = int(voltage / 3.3 * 65535)
-    print("ADC voltage:", voltage, "V")
+    # print("ADC voltage:", voltage, "V")
 
     # send data via UART
     uart.write(f"{send_duty},{recv_duty}\n")
+
+    print("\n========== CYCLE REPORT ==========")
+    print(f"PWM Output: {send_duty:<6d}  | {send_duty / 65535 * 3.3:>5.3f} V  | {send_duty / 65535 * 100:>6.2f} %")
+    print(f"ADC Input:  {recv_duty:<6d}  | {voltage:>5.3f} V")
+    print("----------------------------------")
 
     # check if any data is avaliable to read
     if uart.any():
@@ -42,11 +47,14 @@ while True:
                 # Split into two integer values: send_duty, recv_duty
                 UART_send_duty, UART_recv_duty = map(int, line.split(','))
 
-                print(f"[UART] Received from other Pico send_duty={UART_send_duty}, recv_duty={UART_recv_duty}")
+                err_send = abs(UART_recv_duty - send_duty) / send_duty * 100
+                err_recv = abs(UART_send_duty - recv_duty) / UART_send_duty * 100
 
-                print("error % for the signal sent from this Pico:", abs(UART_recv_duty - send_duty) / send_duty * 100, "%")
-                print("error % for the signal recevied from this Pico:", abs(UART_send_duty - recv_duty) / UART_send_duty * 100, "%")
 
+                print("[UART] RX Data:")
+                print(f"  Peer send_duty = {UART_send_duty:<6d}  |  recv_duty = {UART_recv_duty:<6d}")
+                print(f"  Error % (send): {err_send:>6.3f} %")
+                print(f"  Error % (recv): {err_recv:>6.3f} %")
 
             except ValueError:
                 print("[UART] Could not interpret received data:", line)
@@ -54,7 +62,7 @@ while True:
                 print("[UART] Unexpected error while parsing:", e)
   
     else:
-        print("Pico disconnected")
+        print("[UART] Pico UART disconnected")
     
     print("-------------------------------------------------------")
     
