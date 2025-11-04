@@ -21,13 +21,10 @@ while True:
     time.sleep(0.1)
     pwm.duty_u16(send_duty)
 
-    # print(f"PWM send duty set to: {send_duty} ({send_duty / 65535 * 3.3}v, {send_duty / 65535 * 100}%)")
-
     # read the pwm signal
     raw = adc.read(channel1=2)  # read AIN2
     voltage = adc.raw_to_v(raw)
     recv_duty = int(voltage / 3.3 * 65535)
-    # print("ADC voltage:", voltage, "V")
 
     # send data via UART
     uart.write(f"{send_duty},{recv_duty}\n")
